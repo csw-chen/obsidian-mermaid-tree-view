@@ -1,0 +1,106 @@
+/* author: csw。独立脑图画布使用主题变量，兼容亮色与暗色模式。 */
+.mtv-view {
+  --mtv-surface: var(--background-primary, #ffffff);
+  --mtv-soft: var(--background-secondary, #f5f7fa);
+  --mtv-text: var(--text-normal, #293547);
+  --mtv-muted: var(--text-muted, #748297);
+  --mtv-border: var(--background-modifier-border, #e3e9ef);
+  --mtv-font-size: 15px;
+  width: 100%; border: 1px solid var(--mtv-border); border-radius: 14px;
+  background: var(--mtv-surface); color: var(--mtv-text); overflow: hidden;
+  font-family: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+  text-align: left; position: relative; isolation: isolate; container-type: inline-size; box-sizing: border-box;
+}
+.mtv-toolbar { display: flex; align-items: center; gap: 6px; padding: 7px 34px 7px 8px; border-bottom: 1px solid var(--mtv-border); background: var(--mtv-surface); overflow-x: auto; scrollbar-width: thin; }
+.mtv-appearance { display: flex; flex: 0 0 auto; align-items: center; gap: 4px; }
+.mtv-control { display: inline-flex; flex: 0 0 auto; align-items: center; margin: 0; font-size: 11px; color: var(--mtv-muted); white-space: nowrap; }
+.mtv-control > span { display: none; }
+.mtv-view select, .mtv-view button, .mtv-view input[type="search"] { box-sizing: border-box; font-family: inherit; font-size: 12px; color: var(--mtv-text); border: 1px solid var(--mtv-border); border-radius: 7px; background: var(--mtv-surface); box-shadow: none; height: 30px; padding: 3px 8px; margin: 0; }
+.mtv-view select { max-width: 116px; cursor: pointer; }
+.mtv-view button { cursor: pointer; min-width: 30px; }
+.mtv-view button:hover, .mtv-view select:hover { border-color: #39a889; background: var(--mtv-soft); }
+.mtv-view button:focus-visible, .mtv-view select:focus-visible, .mtv-view input:focus-visible, .mtv-fold:focus-visible { outline: 2px solid #39a889; outline-offset: 2px; }
+.mtv-actions { display: flex; flex: 0 0 auto; gap: 3px; align-items: center; }
+.mtv-toolbar select, .mtv-toolbar button { height: 25px; min-width: 24px; padding: 2px 5px; font-size: 11px; border-radius: 5px; white-space: nowrap; }
+.mtv-toolbar select { max-width: 92px; }
+.mtv-details { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; padding: 12px 16px; background: var(--mtv-soft); border-bottom: 1px solid var(--mtv-border); font-size: 12px; }
+.mtv-details[hidden] { display: none; }
+.mtv-details label { display: flex; gap: 6px; align-items: center; }
+.mtv-details label:has(input[type="range"]) { flex-direction: column; align-items: flex-start; }
+.mtv-details input[type="range"] { width: 112px; accent-color: #39a889; }
+.mtv-details input[type="search"] { width: 170px; }
+.mtv-stage { position: relative; overflow: hidden; cursor: grab; touch-action: none; user-select: none; background: var(--mtv-surface); }
+.mtv-stage[data-background="dots"] { background-image: radial-gradient(var(--mtv-border) 0.8px, transparent 0.8px); background-size: 22px 22px; }
+.mtv-stage.is-dragging { cursor: grabbing; }
+.mtv-stage:focus-visible { outline: 2px solid #39a889; outline-offset: -2px; }
+.mtv-svg { display: block !important; width: 100% !important; height: 100% !important; max-width: none !important; background: transparent !important; filter: none !important; }
+.mtv-svg .mtv-edge { stroke-linecap: round; stroke-linejoin: round; opacity: 0.82; }
+.mtv-view .mtv-label { display: block !important; box-sizing: border-box; font-family: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif !important; font-size: var(--mtv-font-size) !important; line-height: 1.5 !important; white-space: normal !important; overflow-wrap: anywhere !important; text-align: center; }
+.mtv-view .mtv-label p { margin: 0 !important; padding: 0 !important; line-height: inherit !important; }
+.mtv-view .mtv-label span { color: inherit !important; font-size: inherit !important; }
+.mtv-view .mtv-label, .mtv-view .mtv-label * { color: var(--mtv-node-color) !important; }
+.mtv-view .mtv-label a { color: inherit; text-decoration: underline; pointer-events: auto; }
+.mtv-view .mtv-label svg { width: 1em; height: 1em; display: inline-block; }
+.mtv-measure { position: absolute; left: -10000px; top: 0; width: max-content; visibility: hidden; pointer-events: none; }
+.mtv-fold { cursor: pointer; }
+.mtv-fold text { font-family: sans-serif; font-size: 12px; pointer-events: none; fill: var(--mtv-fold-color) !important; }
+.mtv-node.is-match .mtv-card { stroke: #e5a02d; stroke-width: 3px; }
+/* 查看模式保持平移手势，只有进入编辑模式才呈现选择和文字输入。 */
+.mtv-view.is-editing .mtv-node { cursor: pointer; }
+.mtv-view.is-editing .mtv-node.is-selected .mtv-card { stroke: #2876b8 !important; stroke-width: 2.5px !important; filter: drop-shadow(0 2px 4px #2876b833); }
+.mtv-view .mtv-edit-toggle { flex: 0 0 26px; display: inline-flex; align-items: center; justify-content: center; width: 26px; margin-left: auto; color: #376f9f; }
+.mtv-view .mtv-edit-toggle svg { width: 16px; height: 16px; }
+.mtv-view .mtv-edit-toggle[aria-pressed="true"] { color: #fff; border-color: #376f9f; background: #376f9f; }
+.mtv-editbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 14px; background: var(--mtv-soft); border-bottom: 1px solid var(--mtv-border); }
+.mtv-editbar[hidden] { display: none; }
+.mtv-selected-label { min-width: 70px; max-width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; font-weight: 600; color: var(--mtv-text); }
+.mtv-editbar button { display: inline-flex; gap: 8px; align-items: center; }
+.mtv-editbar kbd { font-family: inherit; font-size: 10px; color: var(--mtv-muted); padding: 0; background: transparent; box-shadow: none; }
+.mtv-edit-status { margin-left: auto; font-size: 11px; color: var(--mtv-muted); max-width: 320px; }
+.mtv-inline-editor { position: absolute; z-index: 8; display: flex; gap: 5px; align-items: center; box-sizing: border-box; padding: 6px; border: 2px solid #376f9f; border-radius: 8px; background: var(--mtv-surface); box-shadow: 0 6px 20px #142b4433; }
+.mtv-inline-editor input { width: 0; min-width: 0; flex: 1; height: 30px; border: 0; padding: 4px 6px; background: var(--mtv-surface); color: var(--mtv-text); font-size: 14px; box-shadow: none; }
+.mtv-inline-editor button { padding: 2px 7px; }
+.mtv-delete-prompt { display: flex; gap: 8px; align-items: center; font-size: 12px; width: 100%; padding-top: 4px; color: var(--mtv-text); }
+.mtv-delete-prompt button:first-of-type { color: var(--text-error, #b84343); }
+.mtv-footer { padding: 9px 14px; border-top: 1px solid var(--mtv-border); font-size: 11px; line-height: 1.5; color: var(--mtv-muted); background: var(--mtv-surface); }
+.mtv-view.is-fullscreen { position: fixed; inset: 18px; z-index: 100000; width: auto; display: flex; flex-direction: column; box-shadow: 0 12px 60px #0003; }
+.mtv-view.is-fullscreen .mtv-stage { flex: 1; min-height: 0; height: auto !important; }
+/* 画布自带查看按钮，隐藏同一宿主上的重复按钮。 */
+.mtv-host > .slick-mermaid-fs-btn, .mtv-host > .mermaid-lens-expand-button, .mtv-host > .mermaid-lens-expand { display: none !important; }
+/* 工具栏始终单行，窄分栏通过横向滚动保留全部操作。 */
+@container (max-width: 480px) { .mtv-editbar { gap: 6px; padding: 10px; } .mtv-editbar kbd { display: none; } }
+.mtv-inline-anchor { width: 100%; pointer-events: none; }
+.mtv-view.mtv-inline-layer { position: fixed; z-index: 100; margin: 0; }
+@media (max-width: 600px) { .mtv-view.is-fullscreen { inset: 4px; } }
+
+/* 原生流程图使用蓝色过程节点与暖色判断节点，ER 表头和字段分层显示。 */
+svg.mtv-native {
+  --mtv-native-paper: #ffffff;
+  --mtv-native-row: #f3f7fc;
+  --mtv-native-text: #24364a;
+  --mtv-native-muted: #586b80;
+  --mtv-native-heading: #376f9f;
+  --mtv-native-heading-text: #ffffff;
+  --mtv-native-border: #cfdfec;
+  --mtv-native-line: #718aa1;
+  --mtv-native-node: #eef6fd;
+  --mtv-native-node-border: #9cbbd6;
+  --mtv-native-decision: #fff5e5;
+  --mtv-native-decision-border: #dcb779;
+  --mtv-native-key: #967128;
+  background: var(--mtv-native-paper) !important;
+}
+.theme-dark svg.mtv-native {
+  --mtv-native-paper: #1e2631;
+  --mtv-native-row: #253240;
+  --mtv-native-text: #e1ebf5;
+  --mtv-native-muted: #b1c2d3;
+  --mtv-native-heading: #345f80;
+  --mtv-native-border: #40556a;
+  --mtv-native-line: #98aec4;
+  --mtv-native-node: #253a4d;
+  --mtv-native-node-border: #6085a5;
+  --mtv-native-decision: #413623;
+  --mtv-native-decision-border: #a78955;
+  --mtv-native-key: #e6c785;
+}

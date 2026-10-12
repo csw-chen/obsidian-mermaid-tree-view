@@ -1,0 +1,6 @@
+# Local Obsidian preferences and generated install packages.
+data.json
+.obsidian/
+dist/
+node_modules/
+*.log
